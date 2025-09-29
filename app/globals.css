@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ring: 0 0 0 1px rgba(255,255,255,0.08);
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  @apply text-text bg-bg;
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(122,163,255,0.18), transparent 60%),
+    radial-gradient(900px 500px at 10% 10%, rgba(154,122,255,0.18), transparent 60%),
+    theme('colors.bg');
+}
+
+.glass {
+  background: rgba(10,10,15,0.45);
+  backdrop-filter: saturate(160%) blur(8px);
+}
+
+.btn {
+  @apply inline-flex items-center gap-2 rounded-full border px-4 py-2 text-text no-underline;
+  border-color: rgba(255,255,255,0.12);
+}
+.btn-accent {
+  @apply border-0 text-white;
+  background: linear-gradient(90deg, theme('colors.accent'), theme('colors.accent2'));
+  box-shadow: 0 10px 30px rgba(122,163,255,.25);
+}
+.pill {
+  @apply rounded-full border px-3 py-1 text-sm;
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.08);
+  color: theme('colors.muted');
+}
