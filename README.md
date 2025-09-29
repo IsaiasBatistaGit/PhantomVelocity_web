@@ -1,4 +1,4 @@
-# PhantomVelocity — Dealership (Next.js + Tailwind)
+# Phantom Velocity — Dealership (Next.js + Tailwind)
 
 A McLaren-inspired luxury dealership mock built with Next.js (App Router), Tailwind CSS, and a 3D spinner using @react-three/fiber.
 

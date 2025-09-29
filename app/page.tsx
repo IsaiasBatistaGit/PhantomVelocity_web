@@ -89,7 +89,7 @@ function CarGallery() {
                     </span>
                   </h1>
                   <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
-                    Welcome to PhantomVelocity — your gateway to curated hypercars and limited-series exotics. Private showrooms, white-glove delivery, and track-ready performance.
+                    Welcome to Phantom Velocity — your gateway to curated hypercars and limited-series exotics. Private showrooms, white-glove delivery, and track-ready performance.
                   </p>
                   <div className="flex flex-wrap gap-4">
                     <a className="btn btn-accent text-lg px-8 py-4" href="#inventory">
@@ -734,6 +734,117 @@ export default function Page() {
         </section>
       )}
 
+      {/* Vehicle Filter Section - Only Visible on Home Tab */}
+      {activeTab === 'home' && (
+        <section className="relative overflow-hidden w-full py-16 bg-gradient-to-br from-gray-900 via-black to-gray-800">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                Find Your Next Super Car
+              </h2>
+              <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+                Discover your perfect luxury vehicle with our advanced search filters
+              </p>
+            </div>
+            
+            {/* Filter Form */}
+            <div className="max-w-6xl mx-auto">
+              <div className="bg-black/50 backdrop-blur-md rounded-2xl p-8 border border-white/10">
+                <form className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 items-end">
+                  
+                  {/* Type Filter */}
+                  <div>
+                    <label className="block text-white font-medium mb-3 text-sm">Type</label>
+                    <select className="w-full px-4 py-3 bg-gray-700/50 border border-white/20 rounded-lg text-white focus:border-accent focus:outline-none transition-colors duration-200">
+                      <option value="">All Types</option>
+                      <option value="hypercar">Hypercar</option>
+                      <option value="supercar">Supercar</option>
+                      <option value="sports-car">Sports Car</option>
+                      <option value="luxury-sedan">Luxury Sedan</option>
+                      <option value="suv">Luxury SUV</option>
+                      <option value="coupe">Coupe</option>
+                      <option value="convertible">Convertible</option>
+                    </select>
+                  </div>
+
+                  {/* Year Filter */}
+                  <div>
+                    <label className="block text-white font-medium mb-3 text-sm">Year</label>
+                    <select className="w-full px-4 py-3 bg-gray-700/50 border border-white/20 rounded-lg text-white focus:border-accent focus:outline-none transition-colors duration-200">
+                      <option value="">All Years</option>
+                      <option value="2024">2024</option>
+                      <option value="2023">2023</option>
+                      <option value="2022">2022</option>
+                      <option value="2021">2021</option>
+                      <option value="2020">2020</option>
+                      <option value="2019">2019</option>
+                      <option value="2018">2018</option>
+                      <option value="2017">2017</option>
+                      <option value="2016">2016</option>
+                      <option value="2015">2015</option>
+                    </select>
+                  </div>
+
+                  {/* Model Filter */}
+                  <div>
+                    <label className="block text-white font-medium mb-3 text-sm">Model</label>
+                    <select className="w-full px-4 py-3 bg-gray-700/50 border border-white/20 rounded-lg text-white focus:border-accent focus:outline-none transition-colors duration-200">
+                      <option value="">All Models</option>
+                      <option value="bugatti-chiron">Bugatti Chiron</option>
+                      <option value="mclaren-p1">McLaren P1</option>
+                      <option value="ferrari-laferrari">Ferrari LaFerrari</option>
+                      <option value="porsche-918">Porsche 918 Spyder</option>
+                      <option value="koenigsegg-agera">Koenigsegg Agera</option>
+                      <option value="pagani-huayra">Pagani Huayra</option>
+                      <option value="lamborghini-aventador">Lamborghini Aventador</option>
+                      <option value="mclaren-720s">McLaren 720S</option>
+                      <option value="ferrari-488">Ferrari 488</option>
+                      <option value="porsche-911">Porsche 911</option>
+                    </select>
+                  </div>
+
+                  {/* Stock Number Filter */}
+                  <div>
+                    <label className="block text-white font-medium mb-3 text-sm">Enter Stock #</label>
+                    <input 
+                      type="text" 
+                      placeholder="e.g., PV-2024-001"
+                      className="w-full px-4 py-3 bg-gray-700/50 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:border-accent focus:outline-none transition-colors duration-200"
+                    />
+                  </div>
+
+                  {/* Search Button */}
+                  <div>
+                    <button 
+                      type="submit"
+                      className="w-full bg-accent hover:bg-accent/90 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-200 text-lg shadow-lg shadow-accent/25 hover:shadow-accent/40 hover:scale-105"
+                    >
+                      Search
+                    </button>
+                  </div>
+
+                </form>
+                
+                {/* Quick Filter Tags */}
+                <div className="mt-8 pt-6 border-t border-white/10">
+                  <p className="text-gray-300 text-sm mb-4">Popular Searches:</p>
+                  <div className="flex flex-wrap gap-3">
+                    {['Hypercars', '2024 Models', 'Under $1M', 'Certified Pre-Owned', 'Track Ready', 'Limited Edition'].map((tag, index) => (
+                      <button
+                        key={index}
+                        className="px-4 py-2 bg-white/10 hover:bg-accent/20 text-white text-sm rounded-full border border-white/20 hover:border-accent/50 transition-all duration-200 hover:scale-105"
+                      >
+                        {tag}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Map Section - Only Visible on Home Tab */}
       {activeTab === 'home' && (
         <section className="relative overflow-hidden w-full py-20 bg-gradient-to-br from-gray-900 via-black to-gray-800">
@@ -777,7 +888,7 @@ export default function Page() {
               {/* Location Info */}
               <div className="mt-8 text-center">
                 <div className="bg-black/50 backdrop-blur-md rounded-2xl p-6 border border-white/10 max-w-md mx-auto">
-                  <h3 className="text-2xl font-bold text-white mb-2">PhantomVelocity Showroom</h3>
+                  <h3 className="text-2xl font-bold text-white mb-2">Phantom Velocity Showroom</h3>
                   <p className="text-gray-300 mb-4">
                     123 Luxury Drive<br />
                     Beverly Hills, CA 90210
@@ -1054,7 +1165,7 @@ export default function Page() {
             <div className="text-center mb-16">
               <h1 className="text-5xl font-bold text-white mb-6">About Us</h1>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                Learn more about PhantomVelocity and our commitment to excellence.
+                Learn more about Phantom Velocity and our commitment to excellence.
               </p>
             </div>
             <div className="text-center text-white">
@@ -1080,7 +1191,7 @@ export default function Page() {
         </section>
       )}
 
-      <footer className="px-4 py-8 text-center text-muted">&copy; {new Date().getFullYear()} PhantomVelocity Dealership • "Speed Beyond Imagination"</footer>
+      <footer className="px-4 py-8 text-center text-muted">&copy; {new Date().getFullYear()} Phantom Velocity Dealership • "Speed Beyond Imagination"</footer>
     </main>
   );
 }

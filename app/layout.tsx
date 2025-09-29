@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "PhantomVelocity — Exotic & Performance Dealership",
+  title: "Phantom Velocity — Exotic & Performance Dealership",
   description: "Private showrooms, white-glove delivery, and track-ready performance."
 };
 
