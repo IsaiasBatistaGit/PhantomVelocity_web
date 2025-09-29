@@ -2,6 +2,538 @@
 import { useState, useEffect } from "react";
 import "./globals.css";
 
+// Car data structure
+interface Car {
+  id: string;
+  name: string;
+  model: string;
+  year: number;
+  price: string;
+  originalPrice?: string;
+  image: string;
+  specs: {
+    engine: string;
+    horsepower: number;
+    torque: number;
+    acceleration: string;
+    topSpeed: number;
+    transmission: string;
+    drivetrain: string;
+    fuelEconomy: string;
+  };
+  features: string[];
+  description: string;
+  stockNumber: string;
+  isSpecial?: boolean;
+  specialOffer?: string;
+}
+
+// Car data
+const specialsData: Car[] = [
+  {
+    id: "spec-001",
+    name: "Phantom Spectre",
+    model: "Carbon Edition",
+    year: 2024,
+    price: "$2,850,000",
+    originalPrice: "$3,200,000",
+    image: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&h=600&fit=crop&crop=center&auto=format&q=80",
+    specs: {
+      engine: "6.5L V12 Twin-Turbo",
+      horsepower: 1200,
+      torque: 1000,
+      acceleration: "2.3s",
+      topSpeed: 250,
+      transmission: "8-Speed Dual-Clutch",
+      drivetrain: "AWD",
+      fuelEconomy: "12/18 mpg"
+    },
+    features: ["Carbon Fiber Body", "Active Aero", "Ceramic Brakes", "Custom Interior", "Track Package"],
+    description: "The ultimate expression of automotive excellence. This limited-edition hypercar combines cutting-edge technology with breathtaking design.",
+    stockNumber: "PV-SPEC-001",
+    isSpecial: true,
+    specialOffer: "Save $350,000 - Limited Time"
+  },
+  {
+    id: "spec-002",
+    name: "Veloce Strada",
+    model: "Launch Spec",
+    year: 2024,
+    price: "$1,950,000",
+    originalPrice: "$2,200,000",
+    image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&h=600&fit=crop&crop=center&auto=format&q=80",
+    specs: {
+      engine: "4.0L V8 Twin-Turbo",
+      horsepower: 800,
+      torque: 650,
+      acceleration: "2.8s",
+      topSpeed: 220,
+      transmission: "7-Speed Dual-Clutch",
+      drivetrain: "RWD",
+      fuelEconomy: "15/22 mpg"
+    },
+    features: ["Launch Edition", "Exclusive Paint", "Premium Audio", "Carbon Package", "Performance Tires"],
+    description: "Experience the thrill of pure performance with this launch edition supercar. Only 50 units worldwide.",
+    stockNumber: "PV-SPEC-002",
+    isSpecial: true,
+    specialOffer: "Save $250,000 - Launch Pricing"
+  },
+  {
+    id: "spec-003",
+    name: "Obsidian GT",
+    model: "Track Pack",
+    year: 2024,
+    price: "$1,650,000",
+    originalPrice: "$1,850,000",
+    image: "https://images.unsplash.com/photo-1549317336-206569e8475c?w=800&h=600&fit=crop&crop=center&auto=format&q=80",
+    specs: {
+      engine: "5.2L V10 Naturally Aspirated",
+      horsepower: 700,
+      torque: 580,
+      acceleration: "3.1s",
+      topSpeed: 210,
+      transmission: "6-Speed Manual",
+      drivetrain: "RWD",
+      fuelEconomy: "13/19 mpg"
+    },
+    features: ["Track Package", "Roll Cage", "Racing Seats", "Performance Suspension", "Track Tires"],
+    description: "Built for the track, designed for the road. This track-focused supercar delivers uncompromising performance.",
+    stockNumber: "PV-SPEC-003",
+    isSpecial: true,
+    specialOffer: "Save $200,000 - Track Special"
+  }
+];
+
+const newInventoryData: Car[] = [
+  {
+    id: "new-001",
+    name: "Velocity X1",
+    model: "Hyper Edition",
+    year: 2024,
+    price: "$3,500,000",
+    image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&h=600&fit=crop&crop=center&auto=format&q=80",
+    specs: {
+      engine: "6.8L V12 Quad-Turbo",
+      horsepower: 1500,
+      torque: 1200,
+      acceleration: "2.1s",
+      topSpeed: 280,
+      transmission: "8-Speed Dual-Clutch",
+      drivetrain: "AWD",
+      fuelEconomy: "10/16 mpg"
+    },
+    features: ["Hybrid System", "Active Aero", "Carbon Monocoque", "Luxury Interior", "Smart Suspension"],
+    description: "The pinnacle of automotive engineering. This hypercar redefines what's possible in terms of performance and luxury.",
+    stockNumber: "PV-NEW-001"
+  },
+  {
+    id: "new-002",
+    name: "Nexus Pro",
+    model: "Performance",
+    year: 2024,
+    price: "$1,200,000",
+    image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop&crop=center&auto=format&q=80",
+    specs: {
+      engine: "3.8L V6 Twin-Turbo",
+      horsepower: 600,
+      torque: 500,
+      acceleration: "3.2s",
+      topSpeed: 200,
+      transmission: "7-Speed Dual-Clutch",
+      drivetrain: "AWD",
+      fuelEconomy: "18/25 mpg"
+    },
+    features: ["Performance Package", "Carbon Fiber", "Premium Audio", "Sport Suspension", "Performance Brakes"],
+    description: "Perfect balance of performance and practicality. This supercar delivers thrilling performance with everyday usability.",
+    stockNumber: "PV-NEW-002"
+  },
+  {
+    id: "new-003",
+    name: "Apex Elite",
+    model: "Limited Series",
+    year: 2024,
+    price: "$2,800,000",
+    image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&h=600&fit=crop&crop=center&auto=format&q=80",
+    specs: {
+      engine: "5.5L V8 Twin-Turbo",
+      horsepower: 900,
+      torque: 750,
+      acceleration: "2.6s",
+      topSpeed: 240,
+      transmission: "8-Speed Dual-Clutch",
+      drivetrain: "AWD",
+      fuelEconomy: "14/20 mpg"
+    },
+    features: ["Limited Edition", "Exclusive Paint", "Custom Interior", "Performance Package", "Carbon Package"],
+    description: "Only 25 units will ever be built. This limited series represents the ultimate in exclusivity and performance.",
+    stockNumber: "PV-NEW-003"
+  },
+  {
+    id: "new-004",
+    name: "Phantom GT",
+    model: "Luxury",
+    year: 2024,
+    price: "$950,000",
+    image: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&h=600&fit=crop&crop=center&auto=format&q=80",
+    specs: {
+      engine: "4.4L V8 Twin-Turbo",
+      horsepower: 550,
+      torque: 450,
+      acceleration: "3.5s",
+      topSpeed: 190,
+      transmission: "8-Speed Automatic",
+      drivetrain: "AWD",
+      fuelEconomy: "20/28 mpg"
+    },
+    features: ["Luxury Package", "Premium Leather", "Advanced Audio", "Comfort Suspension", "Driver Assistance"],
+    description: "Luxury meets performance in this elegant grand tourer. Perfect for long-distance comfort with thrilling acceleration.",
+    stockNumber: "PV-NEW-004"
+  },
+  {
+    id: "new-005",
+    name: "Velocity Sport",
+    model: "Track Edition",
+    year: 2024,
+    price: "$1,800,000",
+    image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&h=600&fit=crop&crop=center&auto=format&q=80",
+    specs: {
+      engine: "4.2L V8 Naturally Aspirated",
+      horsepower: 650,
+      torque: 520,
+      acceleration: "2.9s",
+      topSpeed: 215,
+      transmission: "6-Speed Manual",
+      drivetrain: "RWD",
+      fuelEconomy: "16/23 mpg"
+    },
+    features: ["Track Edition", "Lightweight Body", "Racing Seats", "Performance Suspension", "Track Tires"],
+    description: "Pure driving pleasure. This track-focused supercar delivers an authentic, engaging driving experience.",
+    stockNumber: "PV-NEW-005"
+  },
+  {
+    id: "new-006",
+    name: "Nexus Hybrid",
+    model: "Eco Performance",
+    year: 2024,
+    price: "$1,100,000",
+    image: "https://images.unsplash.com/photo-1549317336-206569e8475c?w=800&h=600&fit=crop&crop=center&auto=format&q=80",
+    specs: {
+      engine: "3.0L V6 Hybrid",
+      horsepower: 500,
+      torque: 400,
+      acceleration: "3.8s",
+      topSpeed: 180,
+      transmission: "CVT",
+      drivetrain: "AWD",
+      fuelEconomy: "25/32 mpg"
+    },
+    features: ["Hybrid System", "Eco Mode", "Regenerative Braking", "Premium Interior", "Smart Technology"],
+    description: "Performance with a conscience. This hybrid supercar delivers impressive power while maintaining environmental responsibility.",
+    stockNumber: "PV-NEW-006"
+  },
+  {
+    id: "new-007",
+    name: "Apex Convertible",
+    model: "Open Air",
+    year: 2024,
+    price: "$1,400,000",
+    image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&h=600&fit=crop&crop=center&auto=format&q=80",
+    specs: {
+      engine: "4.0L V8 Twin-Turbo",
+      horsepower: 600,
+      torque: 480,
+      acceleration: "3.3s",
+      topSpeed: 195,
+      transmission: "7-Speed Dual-Clutch",
+      drivetrain: "RWD",
+      fuelEconomy: "17/24 mpg"
+    },
+    features: ["Convertible Top", "Wind Deflector", "Premium Audio", "Luxury Interior", "Performance Package"],
+    description: "Feel the wind in your hair with this stunning convertible supercar. Perfect for sunny day drives.",
+    stockNumber: "PV-NEW-007"
+  },
+  {
+    id: "new-008",
+    name: "Phantom SUV",
+    model: "Luxury Performance",
+    year: 2024,
+    price: "$850,000",
+    image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop&crop=center&auto=format&q=80",
+    specs: {
+      engine: "4.8L V8 Twin-Turbo",
+      horsepower: 650,
+      torque: 600,
+      acceleration: "3.8s",
+      topSpeed: 185,
+      transmission: "8-Speed Automatic",
+      drivetrain: "AWD",
+      fuelEconomy: "15/22 mpg"
+    },
+    features: ["Luxury SUV", "7-Seat Configuration", "Premium Interior", "Advanced Safety", "Off-Road Package"],
+    description: "The ultimate luxury SUV that doesn't compromise on performance. Perfect for families who demand the best.",
+    stockNumber: "PV-NEW-008"
+  },
+  {
+    id: "new-009",
+    name: "Velocity Coupe",
+    model: "Grand Tourer",
+    year: 2024,
+    price: "$1,300,000",
+    image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&h=600&fit=crop&crop=center&auto=format&q=80",
+    specs: {
+      engine: "5.0L V8 Twin-Turbo",
+      horsepower: 700,
+      torque: 550,
+      acceleration: "3.0s",
+      topSpeed: 205,
+      transmission: "8-Speed Dual-Clutch",
+      drivetrain: "AWD",
+      fuelEconomy: "16/23 mpg"
+    },
+    features: ["Grand Tourer", "Luxury Interior", "Advanced Audio", "Comfort Suspension", "Driver Assistance"],
+    description: "The perfect blend of performance and comfort. This grand tourer excels on both track and long-distance journeys.",
+    stockNumber: "PV-NEW-009"
+  },
+  {
+    id: "new-010",
+    name: "Nexus Electric",
+    model: "Future Edition",
+    year: 2024,
+    price: "$1,600,000",
+    image: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&h=600&fit=crop&crop=center&auto=format&q=80",
+    specs: {
+      engine: "Triple Electric Motor",
+      horsepower: 1000,
+      torque: 1200,
+      acceleration: "2.4s",
+      topSpeed: 220,
+      transmission: "Single Speed",
+      drivetrain: "AWD",
+      fuelEconomy: "120 MPGe"
+    },
+    features: ["Electric Powertrain", "400+ Mile Range", "Fast Charging", "Silent Operation", "Smart Technology"],
+    description: "The future is here. This electric supercar delivers incredible performance with zero emissions.",
+    stockNumber: "PV-NEW-010"
+  },
+  {
+    id: "new-011",
+    name: "Apex Racing",
+    model: "Competition",
+    year: 2024,
+    price: "$2,200,000",
+    image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&h=600&fit=crop&crop=center&auto=format&q=80",
+    specs: {
+      engine: "6.0L V12 Naturally Aspirated",
+      horsepower: 850,
+      torque: 700,
+      acceleration: "2.7s",
+      topSpeed: 230,
+      transmission: "6-Speed Sequential",
+      drivetrain: "RWD",
+      fuelEconomy: "12/18 mpg"
+    },
+    features: ["Racing Package", "Roll Cage", "Racing Seats", "Performance Suspension", "Aerodynamic Package"],
+    description: "Built for competition. This racing-focused supercar is designed to dominate on the track.",
+    stockNumber: "PV-NEW-011"
+  },
+  {
+    id: "new-012",
+    name: "Phantom Sedan",
+    model: "Executive",
+    year: 2024,
+    price: "$750,000",
+    image: "https://images.unsplash.com/photo-1549317336-206569e8475c?w=800&h=600&fit=crop&crop=center&auto=format&q=80",
+    specs: {
+      engine: "4.6L V8 Twin-Turbo",
+      horsepower: 500,
+      torque: 420,
+      acceleration: "4.2s",
+      topSpeed: 175,
+      transmission: "8-Speed Automatic",
+      drivetrain: "AWD",
+      fuelEconomy: "19/27 mpg"
+    },
+    features: ["Executive Package", "Luxury Interior", "Rear Entertainment", "Advanced Safety", "Comfort Suspension"],
+    description: "Executive luxury meets performance. This sedan delivers comfort and power in equal measure.",
+    stockNumber: "PV-NEW-012"
+  },
+  {
+    id: "new-013",
+    name: "Velocity Spyder",
+    model: "Open Top",
+    year: 2024,
+    price: "$1,500,000",
+    image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&h=600&fit=crop&crop=center&auto=format&q=80",
+    specs: {
+      engine: "4.5L V8 Twin-Turbo",
+      horsepower: 650,
+      torque: 520,
+      acceleration: "3.1s",
+      topSpeed: 200,
+      transmission: "7-Speed Dual-Clutch",
+      drivetrain: "RWD",
+      fuelEconomy: "16/23 mpg"
+    },
+    features: ["Spyder Configuration", "Removable Top", "Wind Deflector", "Performance Package", "Luxury Interior"],
+    description: "Open-air performance at its finest. This spyder delivers the ultimate driving experience with the wind in your face.",
+    stockNumber: "PV-NEW-013"
+  },
+  {
+    id: "new-014",
+    name: "Nexus Track",
+    model: "Circuit Edition",
+    year: 2024,
+    price: "$1,700,000",
+    image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop&crop=center&auto=format&q=80",
+    specs: {
+      engine: "4.8L V8 Twin-Turbo",
+      horsepower: 750,
+      torque: 600,
+      acceleration: "2.8s",
+      topSpeed: 210,
+      transmission: "7-Speed Dual-Clutch",
+      drivetrain: "RWD",
+      fuelEconomy: "14/21 mpg"
+    },
+    features: ["Circuit Package", "Aerodynamic Kit", "Performance Suspension", "Racing Seats", "Track Tires"],
+    description: "Circuit-ready performance. This track edition supercar is optimized for maximum performance on closed circuits.",
+    stockNumber: "PV-NEW-014"
+  },
+  {
+    id: "new-015",
+    name: "Apex Heritage",
+    model: "Classic Revival",
+    year: 2024,
+    price: "$2,500,000",
+    image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&h=600&fit=crop&crop=center&auto=format&q=80",
+    specs: {
+      engine: "5.2L V10 Naturally Aspirated",
+      horsepower: 600,
+      torque: 480,
+      acceleration: "3.4s",
+      topSpeed: 195,
+      transmission: "6-Speed Manual",
+      drivetrain: "RWD",
+      fuelEconomy: "15/22 mpg"
+    },
+    features: ["Heritage Design", "Classic Styling", "Modern Technology", "Premium Interior", "Limited Edition"],
+    description: "A modern interpretation of classic supercar design. This heritage edition pays homage to automotive legends.",
+    stockNumber: "PV-NEW-015"
+  },
+  {
+    id: "new-016",
+    name: "Phantom Velocity",
+    model: "Ultimate Edition",
+    year: 2024,
+    price: "$4,200,000",
+    image: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&h=600&fit=crop&crop=center&auto=format&q=80",
+    specs: {
+      engine: "7.0L V12 Quad-Turbo Hybrid",
+      horsepower: 1800,
+      torque: 1400,
+      acceleration: "1.9s",
+      topSpeed: 300,
+      transmission: "8-Speed Dual-Clutch",
+      drivetrain: "AWD",
+      fuelEconomy: "8/14 mpg"
+    },
+    features: ["Ultimate Edition", "Carbon Monocoque", "Active Aero", "Ceramic Brakes", "Hybrid System", "Custom Interior", "Track Package", "Limited to 10 Units"],
+    description: "The ultimate expression of automotive perfection. This limited-edition hypercar represents the pinnacle of engineering excellence with only 10 units ever to be produced.",
+    stockNumber: "PV-NEW-016"
+  }
+];
+
+// Car Card Component
+function CarCard({ car }: { car: Car }) {
+  return (
+    <div className="bg-black/50 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 hover:border-accent/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-accent/20">
+      <div className="relative">
+        <img
+          src={car.image}
+          alt={car.name}
+          className="w-full h-64 object-cover"
+        />
+        {car.isSpecial && car.specialOffer && (
+          <div className="absolute top-4 left-4 bg-accent text-black px-3 py-1 rounded-full text-sm font-bold">
+            {car.specialOffer}
+          </div>
+        )}
+        <div className="absolute top-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm font-medium">
+          {car.stockNumber}
+        </div>
+      </div>
+      
+      <div className="p-6">
+        <div className="mb-4">
+          <h3 className="text-2xl font-bold text-white mb-1">{car.name}</h3>
+          <p className="text-accent font-medium">{car.model} • {car.year}</p>
+        </div>
+        
+        <div className="mb-4">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-3xl font-bold text-white">{car.price}</span>
+            {car.originalPrice && (
+              <span className="text-lg text-gray-400 line-through">{car.originalPrice}</span>
+            )}
+          </div>
+        </div>
+        
+        <div className="mb-4">
+          <p className="text-gray-300 text-sm leading-relaxed">{car.description}</p>
+        </div>
+        
+        <div className="mb-4">
+          <h4 className="text-white font-semibold mb-2">Key Specs</h4>
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            <div className="text-gray-300">
+              <span className="text-accent">{car.specs.horsepower} HP</span>
+            </div>
+            <div className="text-gray-300">
+              <span className="text-accent">{car.specs.acceleration}</span> 0-60
+            </div>
+            <div className="text-gray-300">
+              <span className="text-accent">{car.specs.topSpeed} mph</span> Top Speed
+            </div>
+            <div className="text-gray-300">
+              <span className="text-accent">{car.specs.transmission}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="mb-6">
+          <h4 className="text-white font-semibold mb-2">Features</h4>
+          <div className="flex flex-wrap gap-2">
+            {car.features.slice(0, 3).map((feature, index) => (
+              <span
+                key={index}
+                className="px-2 py-1 bg-white/10 text-white text-xs rounded-full"
+              >
+                {feature}
+              </span>
+            ))}
+            {car.features.length > 3 && (
+              <span className="px-2 py-1 bg-accent/20 text-accent text-xs rounded-full">
+                +{car.features.length - 3} more
+              </span>
+            )}
+          </div>
+        </div>
+        
+        <div className="flex gap-3">
+          <button className="flex-1 bg-accent hover:bg-accent/90 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 hover:scale-105">
+            View Details
+          </button>
+          <button className="px-4 py-3 border border-white/30 text-white hover:bg-white/10 rounded-lg transition-all duration-200">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Logo() {
   return (
     <svg viewBox="0 0 64 64" className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12">
@@ -651,7 +1183,10 @@ export default function Page() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
             
           {/* Special Projects */}
-          <div className="group relative h-80 overflow-hidden cursor-pointer">
+          <div 
+            className="group relative h-80 overflow-hidden cursor-pointer"
+            onClick={() => handleTabClick('specials')}
+          >
             <div 
               className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-700 ease-out group-hover:scale-110"
               style={{
@@ -671,7 +1206,10 @@ export default function Page() {
           </div>
 
           {/* Browse our New Inventory */}
-          <div className="group relative h-80 overflow-hidden cursor-pointer">
+          <div 
+            className="group relative h-80 overflow-hidden cursor-pointer"
+            onClick={() => handleTabClick('newinventory')}
+          >
             <div 
               className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-700 ease-out group-hover:scale-110"
               style={{
@@ -938,13 +1476,33 @@ export default function Page() {
         <section className="relative overflow-hidden w-full min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
           <div className="container mx-auto px-4 py-20">
             <div className="text-center mb-16">
-              <h1 className="text-5xl font-bold text-white mb-6">Specials</h1>
+              <h1 className="text-5xl font-bold text-white mb-6">Exclusive Specials</h1>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                Discover our exclusive special offers and limited-time deals on luxury vehicles.
+                Discover our exclusive special offers and limited-time deals on luxury vehicles. These exceptional machines represent the pinnacle of automotive excellence.
               </p>
             </div>
-            <div className="text-center text-white">
-              <p>Specials content coming soon...</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+              {specialsData.map((car) => (
+                <CarCard key={car.id} car={car} />
+              ))}
+            </div>
+            
+            <div className="text-center mt-16">
+              <div className="bg-black/50 backdrop-blur-md rounded-2xl p-8 border border-white/10 max-w-2xl mx-auto">
+                <h3 className="text-2xl font-bold text-white mb-4">Limited Time Offers</h3>
+                <p className="text-gray-300 mb-6">
+                  These exclusive specials are available for a limited time only. Contact our sales team to secure your dream vehicle before these offers expire.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <button className="bg-accent hover:bg-accent/90 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-200 hover:scale-105">
+                    Contact Sales Team
+                  </button>
+                  <button className="border border-white/30 text-white hover:bg-white/10 font-semibold py-3 px-8 rounded-lg transition-all duration-200">
+                    Schedule Test Drive
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -956,11 +1514,61 @@ export default function Page() {
             <div className="text-center mb-16">
               <h1 className="text-5xl font-bold text-white mb-6">New Inventory</h1>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                Explore our latest collection of brand new luxury vehicles and hypercars.
+                Explore our latest collection of brand new luxury vehicles and hypercars. Each vehicle represents the cutting edge of automotive technology and design.
               </p>
             </div>
-            <div className="text-center text-white">
-              <p>New inventory content coming soon...</p>
+            
+            {/* Filter and Search Bar */}
+            <div className="max-w-4xl mx-auto mb-12">
+              <div className="bg-black/50 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <select className="px-4 py-3 bg-gray-700/50 border border-white/20 rounded-lg text-white focus:border-accent focus:outline-none transition-colors duration-200">
+                    <option value="">All Categories</option>
+                    <option value="hypercar">Hypercar</option>
+                    <option value="supercar">Supercar</option>
+                    <option value="luxury">Luxury</option>
+                    <option value="electric">Electric</option>
+                  </select>
+                  <select className="px-4 py-3 bg-gray-700/50 border border-white/20 rounded-lg text-white focus:border-accent focus:outline-none transition-colors duration-200">
+                    <option value="">All Price Ranges</option>
+                    <option value="under-1m">Under $1M</option>
+                    <option value="1m-2m">$1M - $2M</option>
+                    <option value="2m-3m">$2M - $3M</option>
+                    <option value="over-3m">Over $3M</option>
+                  </select>
+                  <input 
+                    type="text" 
+                    placeholder="Search by model or name..."
+                    className="px-4 py-3 bg-gray-700/50 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:border-accent focus:outline-none transition-colors duration-200"
+                  />
+                  <button className="bg-accent hover:bg-accent/90 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 hover:scale-105">
+                    Search
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-8xl mx-auto">
+              {newInventoryData.map((car) => (
+                <CarCard key={car.id} car={car} />
+              ))}
+            </div>
+            
+            <div className="text-center mt-16">
+              <div className="bg-black/50 backdrop-blur-md rounded-2xl p-8 border border-white/10 max-w-2xl mx-auto">
+                <h3 className="text-2xl font-bold text-white mb-4">Can&apos;t Find What You&apos;re Looking For?</h3>
+                <p className="text-gray-300 mb-6">
+                  Our inventory is constantly updated with the latest luxury vehicles. Contact us to discuss your specific requirements or to be notified when new vehicles arrive.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <button className="bg-accent hover:bg-accent/90 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-200 hover:scale-105">
+                    Request Custom Build
+                  </button>
+                  <button className="border border-white/30 text-white hover:bg-white/10 font-semibold py-3 px-8 rounded-lg transition-all duration-200">
+                    Get Notified
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -1191,7 +1799,7 @@ export default function Page() {
         </section>
       )}
 
-      <footer className="px-4 py-8 text-center text-muted">&copy; {new Date().getFullYear()} Phantom Velocity Dealership • "Speed Beyond Imagination"</footer>
+      <footer className="px-4 py-8 text-center text-muted">&copy; {new Date().getFullYear()} Phantom Velocity Dealership • &quot;Speed Beyond Imagination&quot;</footer>
     </main>
   );
 }
